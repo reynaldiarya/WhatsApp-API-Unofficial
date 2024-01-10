@@ -1,7 +1,5 @@
-// Package yang di gunakan
 const { Client, LocalAuth } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
-// express api
 const express = require('express');
 const app = express();
 const port = 8080;
@@ -33,42 +31,47 @@ client.on('qr', (qr) => {
 //Proses Dimana Whatsapp-web.js Siap digunakan
 client.on('ready', () => {
     console.log('Ready !');
-    console.log('Token: ')
-    const token = Math.floor(100000000 + Math.random() * 900000000);
-    console.log(token)
+    const token = Math.floor(100000000000000 + Math.random() * 900000000000000).toString(36);
+    console.log('Token: ', token)
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
     app.post('/api/send', (req, res) => {
         const Authorization = req.headers.authorization;
-        console.log(Authorization, req.body)
         if (Authorization == token) {
-            var phonetemp = req.body.phone
-            if (phonetemp.startsWith('0')) {
-                phonetemp = '62' + phonetemp.slice(1);
-            } else if (phonetemp.startsWith('8')) {
-                phonetemp = '62' + phonetemp;
-            } else if (phonetemp.startsWith('+')) {
-                phonetemp = phonetemp.slice(1);
-            }
-            const phone = phonetemp;
-            const message = req.body.message;
-            client.sendMessage(phone + "@c.us", message)
-                .then(response => {
-                    res.status(200).json({
-                        status: true,
-                        message: 'Success',
-                        meta: response,
+            try {
+                var phonetemp = req.body.phone
+                if (phonetemp.startsWith('0')) {
+                    phonetemp = '62' + phonetemp.slice(1);
+                } else if (phonetemp.startsWith('8')) {
+                    phonetemp = '62' + phonetemp;
+                } else if (phonetemp.startsWith('+')) {
+                    phonetemp = phonetemp.slice(1);
+                }
+                const phone = phonetemp;
+                const message = req.body.message;
+                client.sendMessage(phone + "@c.us", message)
+                    .then(response => {
+                        res.status(200).json({
+                            status: true,
+                            message: 'Success',
+                            meta: response,
 
+                        });
+                    })
+                    .catch(err => {
+                        res.status(200).json({
+                            status: false,
+                            message: 'Error',
+                            meta: err,
+                        });
                     });
-                })
-                .catch(e => {
-                    console.log(e)
-                    res.status(200).json({
-                        status: false,
-                        message: 'Error',
-                        meta: err,
-                    });
+            } catch (err) {
+                res.status(200).json({
+                    status: false,
+                    message: 'Error',
+                    meta: err,
                 });
+            }
         } else {
             res.status(401).json({
                 status: false,
