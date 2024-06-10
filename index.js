@@ -6,6 +6,12 @@ const port = 8080;
 
 // Membuat Client Baru
 const client = new Client({
+    webVersion: "2.2412.54",
+    webVersionCache: {
+        type: "remote",
+        remotePath:
+            "https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.2412.54.html",
+    },
     authStrategy: new LocalAuth(),
     puppeteer: {
         headless: true,
@@ -13,10 +19,35 @@ const client = new Client({
             '--no-sandbox',
             '--disable-setuid-sandbox',
             '--disable-dev-shm-usage',
-            '--disable-accelerated-2d-canvas',
-            '--no-first-run',
+            '--single-process',
             '--no-zygote',
-            '--disable-gpu'
+            '--no-first-run',
+            '--no-default-browser-check',
+            '--disable-extensions',
+            '--disable-default-apps',
+            '--disable-sync',
+            '--disable-translate',
+            '--disable-web-security',
+            '--disable-features=site-per-process',
+            '--disable-infobars',
+            '--window-position=0,0',
+            '--ignore-certificate-errors',
+            '--ignore-certificate-errors-spki-list',
+            '--disable-gpu',
+            '--disable-webgl',
+            '--disable-threaded-animation',
+            '--disable-threaded-scrolling',
+            '--disable-in-process-stack-traces',
+            '--disable-histogram-customizer',
+            '--disable-gl-extensions',
+            '--disable-composited-antialiasing',
+            '--disable-canvas-aa',
+            '--disable-3d-apis',
+            '--disable-accelerated-2d-canvas',
+            '--disable-accelerated-jpeg-decoding',
+            '--disable-accelerated-mjpeg-decode',
+            '--disable-app-list-dismiss-on-blur',
+            '--disable-accelerated-video-decode'
         ]
     },
 });
