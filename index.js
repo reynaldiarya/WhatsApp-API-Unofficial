@@ -2,7 +2,7 @@ const { Client, LocalAuth } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 const express = require('express');
 const app = express();
-const port = 8080;
+const port = 3000;
 
 // Membuat Client Baru
 const client = new Client({
