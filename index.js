@@ -6,11 +6,11 @@ const port = 3000;
 
 // Membuat Client Baru
 const client = new Client({
-    webVersion: "2.3000.1014580163-alpha",
+    webVersion: "2.3000.1014566268-alpha",
     webVersionCache: {
         type: "remote",
         remotePath:
-            "https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.3000.1014580163-alpha.html",
+            "https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.3000.1014566268-alpha.html",
     },
     authStrategy: new LocalAuth(),
     puppeteer: {
