@@ -6,10 +6,7 @@ WORKDIR /app
 ENV LANG=en_US.UTF-8
 
 # Meng-clone repository dari GitHub
-RUN git clone -b load-balancing https://github.com/reynaldiarya/WhatsApp-API.git .
-
-# Menginstal PM2 secara global
-RUN apt-get update && apt-get install -y chromium
+RUN git clone -b auth https://github.com/reynaldiarya/WhatsApp-API.git .
 
 # Meng-copy package.json dan package-lock.json (jika ada)
 COPY package*.json ./
@@ -20,4 +17,4 @@ RUN npm install
 RUN npm install -g pm2
 
 # Menjalankan aplikasi menggunakan PM2
-CMD ["pm2-runtime", "start", "ecosystem.config.js"]
+CMD ["pm2-runtime", "start", "auth.js"]
