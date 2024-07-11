@@ -14,7 +14,6 @@ COPY ecosystem.config.js .
 
 # Menginstall dependencies
 RUN npm install
-RUN npm install -g pm2
 
-# Menjalankan aplikasi menggunakan PM2
-CMD ["pm2-runtime", "start", "auth.js"]
+# Menjalankan aplikasi menggunakan node
+CMD ["node", "auth.js"]
