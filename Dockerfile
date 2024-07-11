@@ -2,7 +2,7 @@
 FROM node:latest
 
 # Membuat direktori kerja di dalam container
-WORKDIR /app
+WORKDIR /auth
 ENV LANG=en_US.UTF-8
 
 # Meng-clone repository dari GitHub
