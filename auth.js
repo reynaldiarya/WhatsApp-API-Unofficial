@@ -8,7 +8,7 @@ console.log('Token: ', token)
 app.get('/auth', (req, res) => {
     const Authorization = req.headers.authorization;
     if (Authorization == token) {
-        next();
+        res.status(200).send('Authorized');
     } else {
         res.status(401).json({
             status: false,
