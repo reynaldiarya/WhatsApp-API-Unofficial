@@ -10,7 +10,6 @@ RUN git clone -b auth https://github.com/reynaldiarya/WhatsApp-API.git .
 
 # Meng-copy package.json dan package-lock.json (jika ada)
 COPY package*.json ./
-COPY ecosystem.config.js .
 
 # Menginstall dependencies
 RUN npm install
