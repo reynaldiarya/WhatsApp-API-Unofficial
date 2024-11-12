@@ -1,14 +1,12 @@
 # Base image Node.js versi terbaru
 FROM node:latest
 
+# Meng-clone repository dari GitHub
+COPY WhatsApp-API /app
+
 # Membuat direktori kerja di dalam container
 WORKDIR /app
 ENV LANG=en_US.UTF-8
-
-# Meng-clone repository dari GitHub
-ARG GIT_USERNAME
-ARG GIT_PASSWORD
-RUN git clone -b load-balancing https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/reynaldiarya/WhatsApp-API.git . \ && rm -rf .git
 
 # Menginstal PM2 secara global
 RUN apt-get update && apt-get install -y chromium
