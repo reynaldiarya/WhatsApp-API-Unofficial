@@ -11,10 +11,6 @@ RUN git clone -b load-balancing https://github.com/reynaldiarya/WhatsApp-API.git
 # Menginstal PM2 secara global
 RUN apt-get update && apt-get install -y chromium
 
-# Meng-copy package.json dan package-lock.json (jika ada)
-COPY package*.json ./
-COPY ecosystem.config.js .
-
 # Menginstall dependencies
 RUN npm install
 RUN npm install -g pm2
