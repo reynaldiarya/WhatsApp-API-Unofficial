@@ -6,7 +6,9 @@ WORKDIR /app
 ENV LANG=en_US.UTF-8
 
 # Meng-clone repository dari GitHub
-RUN git clone -b load-balancing https://github.com/reynaldiarya/WhatsApp-API.git .
+ARG GIT_USERNAME
+ARG GIT_PASSWORD
+RUN git clone -b load-balancing https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/reynaldiarya/WhatsApp-API.git . \ && rm -rf .git
 
 # Menginstal PM2 secara global
 RUN apt-get update && apt-get install -y chromium
