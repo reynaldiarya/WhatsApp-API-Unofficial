@@ -1,6 +1,6 @@
 upstream backend {
-    server localhost:3000;
     server localhost:3002;
+    server localhost:3003;
 }
 
 server {
@@ -15,7 +15,6 @@ server {
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header Authorization $http_authorization;
-
         # Handle errors from the backend directly
         proxy_intercept_errors on;
         error_page 401 = /error401;
@@ -30,6 +29,7 @@ server {
         proxy_set_header Authorization $http_authorization;
     }
 
+    
     location = /error401 {
         internal;
         proxy_pass http://localhost:5000/auth;
@@ -39,3 +39,4 @@ server {
         proxy_set_header Authorization $http_authorization;
     }
 }
+
