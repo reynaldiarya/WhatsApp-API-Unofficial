@@ -28,12 +28,16 @@ http://localhost:3000/api/send
 
 ## Example Requests
 
-### Authentication Request
-Make a POST request to the `/auth` endpoint with user credentials:
+### Send Message Request
+Make a POST request to the `/api/send` endpoint with user credentials:
 ```bash
 curl -X POST http://localhost:3000/api/send \
      -H "Content-Type: application/json" \
-     -H "Authorization: <your-token>"
+     -H "Authorization: <your-token>" \
+     -d '{
+           "phone": "+6201111111111",
+           "message": "Alo"
+         }'
 ```
 
 ### Error Response
