@@ -1,5 +1,3 @@
----
-
 # WhatsApp API Unofficial
 
 This project provides a simple WhatsApp API using whatsapp-web.js. The service is containerized using Docker for easy deployment and scalability.
@@ -7,8 +5,6 @@ This project provides a simple WhatsApp API using whatsapp-web.js. The service i
 ## Requirements
 - Docker installed on your system
 - Access to the terminal/command prompt
-
----
 
 ## Getting Started
 
@@ -30,8 +26,6 @@ The service will be accessible at:
 http://localhost:3000/api/send
 ```
 
----
-
 ## Example Requests
 
 ### Authentication Request
@@ -50,8 +44,6 @@ If authentication fails, you will receive an error message:
 }
 ```
 
----
-
 ## Stopping and Removing the Container
 To stop the running container:
 ```bash
@@ -63,10 +55,6 @@ To remove the container:
 docker rm whatsapp-api
 ```
 
----
-
 ## Notes
 - Ensure that port `3000` is not being used by other services.
 - Use `--restart unless-stopped` to automatically restart the container if it stops unexpectedly.
-
----
