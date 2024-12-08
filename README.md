@@ -26,8 +26,48 @@ The service will be accessible at:
 http://localhost:5000/auth
 ```
 
-### Step 4: Configure Nginx as a Reverse Proxy
-To serve the API through Nginx, you can use the provided nginx.conf.example as a template.
+### Step 4: Install and Configure Nginx with a Custom Domain
+
+#### Install Nginx
+Install Nginx on your server using the following command:
+```bash
+sudo apt update
+sudo apt install nginx
+```
+
+#### Set Up a Domain Name
+1. If you have a domain (e.g., `wa.example.com`), point it to your server's IP address using your domain registrar's DNS settings.
+2. Verify that the domain points to your server:
+   ```bash
+   ping wa.example.com
+   ```
+
+#### Configure Nginx
+1. Create a new Nginx configuration file:
+   ```bash
+   sudo nano /etc/nginx/sites-available/wa.example.com.conf
+   ```
+2. Add the following configuration to the file. You can use the provided nginx.conf.example as a template to set up the API with Nginx.
+3. Enable the configuration by creating a symbolic link:
+   ```bash
+   sudo ln -s /etc/nginx/sites-available/wa.example.com.conf /etc/nginx/sites-enabled/
+   ```
+
+#### Test and Reload Nginx
+1. Test the Nginx configuration for syntax errors:
+   ```bash
+   sudo nginx -t
+   ```
+2. Reload Nginx to apply the changes:
+   ```bash
+   sudo systemctl reload nginx
+   ```
+
+#### Access the Service via Domain
+Now, your service is accessible via the custom domain:
+```
+http://wa.example.com/auth
+```
 
 ## Example Requests
 
