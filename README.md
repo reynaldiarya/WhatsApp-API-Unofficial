@@ -26,6 +26,9 @@ The service will be accessible at:
 http://localhost:5000/auth
 ```
 
+### Step 4: Configure Nginx as a Reverse Proxy
+To serve the API through Nginx, you can use the provided nginx.conf.example as a template.
+
 ## Example Requests
 
 ### Authentication Request
