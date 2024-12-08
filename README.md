@@ -40,7 +40,9 @@ curl -X POST http://localhost:5000/auth \
 If authentication fails, you will receive an error message:
 ```json
 {
-  "error": "Unauthorized"
+  "status": "false",
+  "message": "Error",
+  "meta": "Not Authorized"
 }
 ```
 
