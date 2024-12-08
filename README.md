@@ -31,7 +31,7 @@ http://localhost:3000/api/send
 ### Authentication Request
 Make a POST request to the `/auth` endpoint with user credentials:
 ```bash
-curl -X POST http://localhost:5000/auth \
+curl -X POST http://localhost:3000/api/send \
      -H "Content-Type: application/json" \
      -H "Authorization: <your-token>"
 ```
