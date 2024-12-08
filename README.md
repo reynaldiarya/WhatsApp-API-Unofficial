@@ -53,3 +53,4 @@ docker rm whatsapp-api
 ## Notes
 - Ensure that port `3001` is not being used by other services.
 - Use `--restart unless-stopped` to automatically restart the container if it stops unexpectedly.
+- It doesn't use auth tokens, so anyone can send it. If you want to add auth, read the readme on the auth branch
