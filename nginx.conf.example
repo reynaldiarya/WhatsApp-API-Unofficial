@@ -1,6 +1,6 @@
 upstream backend {
+    server localhost:3001;
     server localhost:3002;
-    server localhost:3003;
 }
 
 server {
