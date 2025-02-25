@@ -5,14 +5,14 @@ FROM node:latest
 WORKDIR /auth
 ENV LANG=en_US.UTF-8
 
-# Membuat direktori untuk menyimpan data
-RUN mkdir -p /auth/data
-
 # Meng-clone repository dari GitHub
 RUN git clone -b auth https://github.com/reynaldiarya/WhatsApp-API-Unofficial.git .
 
 # Menginstall dependencies
 RUN npm install
+
+# Membuat direktori untuk menyimpan data
+RUN mkdir -p /auth/data
 
 # Menambahkan volume untuk menyimpan token
 VOLUME ["/auth/data"]
