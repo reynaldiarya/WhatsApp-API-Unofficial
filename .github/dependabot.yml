@@ -7,6 +7,27 @@ version: 2
 updates:
   - package-ecosystem: "npm" # See documentation for possible values
     directory: "/" # Location of package manifests
+    target-branch: "main"
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+  
+  - package-ecosystem: "npm"
+    directory: "/"
+    target-branch: "auth"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+
+  - package-ecosystem: "npm"
+    directory: "/"
+    target-branch: "load-balancing"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
