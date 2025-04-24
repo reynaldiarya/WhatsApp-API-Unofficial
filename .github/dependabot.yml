@@ -9,7 +9,7 @@ updates:
     directory: "/" # Location of package manifests
     target-branch: "main"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
     open-pull-requests-limit: 5
     labels:
       - "dependencies"
@@ -18,7 +18,7 @@ updates:
     directory: "/"
     target-branch: "auth"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
     open-pull-requests-limit: 5
     labels:
       - "dependencies"
@@ -27,7 +27,7 @@ updates:
     directory: "/"
     target-branch: "load-balancing"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
     open-pull-requests-limit: 5
     labels:
       - "dependencies"
