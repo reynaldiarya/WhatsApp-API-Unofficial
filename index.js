@@ -108,6 +108,20 @@ client.on('ready', () => {
     app.listen(port, () => console.log(`Hello world app listening on port ${port}!`))
 });
 
+// BOT Autorespon
+client.on('message', async message => {
+    // Nomor utama yang diminta untuk dihubungi
+    const mainNumber = '+6281234567890';
+
+    // Balas dengan pesan arahan untuk menghubungi nomor utama
+    message.reply(
+        `Terima kasih sudah menghubungi kami.\n` +
+        `Untuk layanan lebih lanjut, silakan WhatsApp ke nomor utama kami di:\n` +
+        `https://wa.me/${mainNumber}\n` +
+        `Kami siap membantu Anda!`
+    );
+});
+
 //Proses Dimana klient disconnect dari Whatsapp-web
 client.on('disconnected', (reason) => {
     console.log('disconnect Whatsapp-bot', reason);
