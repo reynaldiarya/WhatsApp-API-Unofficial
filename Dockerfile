@@ -5,6 +5,9 @@ FROM node:22-alpine
 WORKDIR /auth
 ENV LANG=en_US.UTF-8
 
+# Menginstall git
+RUN apk add --no-cache git
+
 # Meng-clone repository dari GitHub
 RUN git clone -b auth https://github.com/reynaldiarya/WhatsApp-API-Unofficial.git .
 
