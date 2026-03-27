@@ -5,7 +5,7 @@ const crypto = require('crypto');
  * @returns {string} The generated token.
  */
 function generateSecureToken() {
-    return crypto.randomBytes(32).toString('hex');
+  return crypto.randomBytes(32).toString('hex');
 }
 
 /**
@@ -15,23 +15,23 @@ function generateSecureToken() {
  * @returns {boolean} True if tokens match.
  */
 function timingSafeCompare(a, b) {
-    if (!a || !b) return false;
-    
-    // We need to ensure both buffers are the same length for timingSafeEqual
-    // If lengths differ, we still do a "dummy" comparison to avoid leaking length info
-    const bufA = Buffer.from(a);
-    const bufB = Buffer.from(b);
-    
-    if (bufA.length !== bufB.length) {
-        // Dummy comparison with a constant-time check
-        crypto.timingSafeEqual(bufA, bufA);
-        return false;
-    }
-    
-    return crypto.timingSafeEqual(bufA, bufB);
+  if (!a || !b) return false;
+
+  // We need to ensure both buffers are the same length for timingSafeEqual
+  // If lengths differ, we still do a "dummy" comparison to avoid leaking length info
+  const bufA = Buffer.from(a);
+  const bufB = Buffer.from(b);
+
+  if (bufA.length !== bufB.length) {
+    // Dummy comparison with a constant-time check
+    crypto.timingSafeEqual(bufA, bufA);
+    return false;
+  }
+
+  return crypto.timingSafeEqual(bufA, bufB);
 }
 
 module.exports = {
-    generateSecureToken,
-    timingSafeCompare
+  generateSecureToken,
+  timingSafeCompare,
 };
