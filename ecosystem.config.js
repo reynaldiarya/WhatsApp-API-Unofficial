@@ -1,7 +1,7 @@
 module.exports = {
   apps : [{
     name: "WhatsAppAPI", // Ganti dengan nama aplikasi Anda
-    script: "index.js", // File utama aplikasi Anda
+    script: "src/index.js", // File utama aplikasi Anda
     instances: 1,
     autorestart: true,
     watch: false,
