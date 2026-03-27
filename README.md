@@ -17,7 +17,7 @@ docker build -t whatsapp-api:auth .
 ### Step 2: Run the Container
 Run the Docker container and expose the service on port 5000:
 ```bash
-docker run -p 5000:5000 --name whatsapp-api-auth --restart unless-stopped whatsapp-api:auth
+docker run -p 5000:5000 --name whatsapp-api-auth --env-file .env --restart unless-stopped whatsapp-api:auth
 ```
 
 ### Step 3: Access the Service
