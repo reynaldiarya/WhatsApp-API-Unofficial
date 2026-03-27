@@ -5,18 +5,20 @@ FROM node:22-alpine
 WORKDIR /app
 ENV LANG=en_US.UTF-8
 
-# Menginstall git
-RUN apk add --no-cache git
+# Menginstall sistem
+RUN apk add --no-cache \
+    git \
+    chromium \
+    nss \
+    freetype \
+    harfbuzz \
+    ca-certificates \
+    ttf-freefont
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
 
 # Meng-clone repository dari GitHub
 RUN git clone https://github.com/reynaldiarya/WhatsApp-API-Unofficial.git .
-
-# Menginstal PM2 secara global
-RUN apt-get update && apt-get install -y chromium
-
-# Meng-copy package.json dan package-lock.json (jika ada)
-COPY package*.json ./
-COPY ecosystem.config.js .
 
 # Menginstall dependencies
 RUN npm install
