@@ -18,4 +18,4 @@ RUN mkdir -p /auth/data
 VOLUME ["/auth/data"]
 
 # Menjalankan aplikasi menggunakan node
-CMD ["node", "auth.js"]
+CMD ["node", "src/index.js"]
