@@ -22,7 +22,7 @@ docker build -t whatsapp-api:v1 .
 Run the Docker container and expose the service on port 5000:
 
 ```bash
-docker run -p 3001:3001 --name whatsapp-api --restart unless-stopped whatsapp-api:v1
+docker run -p 3001:3001 --name whatsapp-api --env-file .env --restart unless-stopped whatsapp-api:v1
 ```
 
 ### Step 3: Access the Service
