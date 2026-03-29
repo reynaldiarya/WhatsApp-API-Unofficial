@@ -89,6 +89,7 @@ client.on('ready', () => {
 });
 
 client.on('message', async (message) => {
+  if (process.env.AUTOREPLY !== 'true') return;
   const mainNumber = process.env.MAIN_NUMBER || '+6281234567890';
   message.reply(
     `Terima kasih sudah menghubungi kami.\n` +
