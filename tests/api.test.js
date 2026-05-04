@@ -5,7 +5,7 @@ const fs = require('fs');
 async function runTests() {
   process.env.NODE_ENV = 'test';
   process.env.LOG_LEVEL = 'silent';
-  process.env.TOKEN_FILE = path.join(__dirname, '../src/data/test_api_token.txt');
+  process.env.TOKEN_FILE = path.join(process.cwd(), 'auth', 'data', 'token.test.txt');
   process.env.MAIN_NUMBER = '6281234567890';
 
   const app = require('../src/index');

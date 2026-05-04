@@ -13,7 +13,7 @@ const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
 const port = process.env.PORT || 3000;
-const tokenFile = process.env.TOKEN_FILE || '/auth/data/token.txt';
+const tokenFile = process.env.TOKEN_FILE || path.join(process.cwd(), 'auth', 'data', 'token.txt');
 
 const logger = pino({
   level: process.env.LOG_LEVEL || 'info',
