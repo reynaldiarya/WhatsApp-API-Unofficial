@@ -103,6 +103,10 @@ client.on('disconnected', (reason) => {
   logger.warn({ msg: 'WhatsApp Client disconnected', reason });
 });
 
+client.on('auth_failure', (msg) => {
+  logger.error({ msg: 'WhatsApp authentication failed', detail: msg });
+});
+
 // Express Setup
 app.use(helmet());
 app.use(cors());
@@ -180,16 +184,16 @@ if (require.main === module) {
   // Graceful Shutdown
   const shutdown = async () => {
     logger.info('Shutting down...');
-    try {
-      await client.destroy();
-      server.close(() => {
-        logger.info('Server closed');
+    server.close(async () => {
+      logger.info('HTTP server closed, closing WhatsApp client...');
+      try {
+        await client.destroy();
         process.exit(0);
-      });
-    } catch (err) {
-      logger.error({ msg: 'Error during shutdown', error: err.message });
-      process.exit(1);
-    }
+      } catch (err) {
+        logger.error({ msg: 'Error shutting down WA client', error: err.message });
+        process.exit(1);
+      }
+    });
   };
 
   process.on('SIGTERM', shutdown);
