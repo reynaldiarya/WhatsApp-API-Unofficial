@@ -10,7 +10,7 @@ const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
 const port = process.env.PORT || 5000;
-const tokenFile = process.env.TOKEN_FILE || '/auth/data/token.txt';
+const tokenFile = process.env.TOKEN_FILE || path.join(process.cwd(), 'auth', 'data', 'token.txt');
 
 const logger = pino({
   level: process.env.LOG_LEVEL || 'info',
@@ -65,7 +65,6 @@ function getOrCreateToken() {
 }
 
 token = getOrCreateToken();
-logger.info(`Server ready with token: ${token}`);
 
 // Authentication endpoint for Nginx auth_request
 app.get('/auth', (req, res) => {
@@ -93,6 +92,7 @@ app.use(errorHandler);
 if (require.main === module) {
   const server = app.listen(port, () => {
     logger.info(`Auth service listening on port ${port}`);
+    logger.info(`Server ready with token: ${token}`);
   });
 
   // Graceful shutdown
