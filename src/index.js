@@ -13,7 +13,7 @@ const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
 const port = process.env.PORT || 3000;
-const tokenFile = process.env.TOKEN_FILE || path.join(__dirname, 'data/token.txt');
+const tokenFile = process.env.TOKEN_FILE || '/auth/data/token.txt';
 
 const logger = pino({
   level: process.env.LOG_LEVEL || 'info',
@@ -52,7 +52,7 @@ const client = new Client({
   webVersionCache: {
     type: 'remote',
     remotePath:
-      'https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.3000.1036094556-alpha.html',
+      'https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.3000.1038711718-alpha.html',
   },
   puppeteer: {
     headless: true,
