@@ -9,8 +9,8 @@
     "test": "node tests/api.test.js",
     "format": "prettier . --write"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["whatsapp", "api", "docker", "nodejs", "express", "whatsapp-web.js"],
+  "author": "Reynaldi Arya",
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.6",
