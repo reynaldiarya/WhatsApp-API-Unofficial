@@ -24,15 +24,21 @@ async function runTests() {
     if (resHealth.status === 200) console.log('✅ GET /health passed');
     else throw new Error('Health check failed');
 
-    // Unauthorized
-    const resUnauth = await request(app).post('/auth').send({ phone: '123', message: 'hi' });
-    if (resUnauth.status === 401) console.log('✅ POST /api/send (unauthorized) passed');
+    // Authorized
+    const resAuth = await request(app).get('/auth').set('Authorization', token);
+    if (resAuth.status === 200 && resAuth.text === 'Authorized')
+      console.log('✅ GET /auth (authorized) passed');
+    else throw new Error('Authorized check failed');
+
+    // Unauthorized (wrong token)
+    const resUnauth = await request(app).get('/auth').set('Authorization', 'wrong-token');
+    if (resUnauth.status === 401) console.log('✅ GET /auth (unauthorized - wrong token) passed');
     else throw new Error('Unauthorized check failed');
 
-    // Status check
-    const resStatus = await request(app).get('/status');
-    if (resStatus.status === 200) console.log('✅ GET /status passed');
-    else throw new Error('Status check failed');
+    // Unauthorized (no token)
+    const resNoAuth = await request(app).get('/auth');
+    if (resNoAuth.status === 401) console.log('✅ GET /auth (unauthorized - no token) passed');
+    else throw new Error('Unauthorized no-token check failed');
   } catch (err) {
     console.error('❌ Tests failed:', err.message);
     status = 1;

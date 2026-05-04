@@ -1,6 +1,6 @@
 {
   "name": "auth",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "This project provides a simple WhatsApp API using whatsapp-web.js. The service is containerized using Docker for easy deployment and scalability.",
   "main": "src/index.js",
   "scripts": {
@@ -9,7 +9,14 @@
     "test": "node tests/auth.test.js",
     "format": "prettier . --write"
   },
-  "keywords": ["whatsapp", "api", "docker", "nodejs", "express", "whatsapp-web.js"],
+  "keywords": [
+    "whatsapp",
+    "api",
+    "docker",
+    "nodejs",
+    "express",
+    "whatsapp-web.js"
+  ],
   "author": "Reynaldi Arya",
   "license": "ISC",
   "dependencies": {
