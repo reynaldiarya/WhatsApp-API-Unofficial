@@ -13,7 +13,7 @@ const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
 const port = process.env.PORT || 3000;
-const tokenFile = process.env.TOKEN_FILE || '/auth/data/token.txt';
+const tokenFile = process.env.TOKEN_FILE || path.join(process.cwd(), 'auth', 'data', 'token.txt');
 
 const logger = pino({
   level: process.env.LOG_LEVEL || 'info',
@@ -103,6 +103,10 @@ client.on('disconnected', (reason) => {
   logger.warn({ msg: 'WhatsApp Client disconnected', reason });
 });
 
+client.on('auth_failure', (msg) => {
+  logger.error({ msg: 'WhatsApp authentication failed', detail: msg });
+});
+
 // Express Setup
 app.use(helmet());
 app.use(cors());
@@ -160,34 +164,38 @@ app.get('/status', (req, res) => {
   res.status(200).json({
     status: 'online',
     token_preview: token.substring(0, 8) + '...',
-    whatsapp_ready: client.info ? true : false,
+    whatsapp_ready: !!client.info,
   });
 });
 
 app.use(errorHandler);
 
-const server = app.listen(port, () => {
-  logger.info(`Server ready at http://localhost:${port}`);
-  logger.info(`Token for authorization: ${token}`);
-});
+module.exports = app;
 
-// Initialize Client
-client.initialize();
+if (require.main === module) {
+  const server = app.listen(port, () => {
+    logger.info(`Server ready at http://localhost:${port}`);
+    logger.info(`Token for authorization: ${token}`);
+  });
 
-// Graceful Shutdown
-const shutdown = async () => {
-  logger.info('Shutting down...');
-  try {
-    await client.destroy();
-    server.close(() => {
-      logger.info('Server closed');
-      process.exit(0);
+  // Initialize Client
+  client.initialize();
+
+  // Graceful Shutdown
+  const shutdown = async () => {
+    logger.info('Shutting down...');
+    server.close(async () => {
+      logger.info('HTTP server closed, closing WhatsApp client...');
+      try {
+        await client.destroy();
+        process.exit(0);
+      } catch (err) {
+        logger.error({ msg: 'Error shutting down WA client', error: err.message });
+        process.exit(1);
+      }
     });
-  } catch (err) {
-    logger.error({ msg: 'Error during shutdown', error: err.message });
-    process.exit(1);
-  }
-};
+  };
 
-process.on('SIGTERM', shutdown);
-process.on('SIGINT', shutdown);
+  process.on('SIGTERM', shutdown);
+  process.on('SIGINT', shutdown);
+}
