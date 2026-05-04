@@ -7,13 +7,11 @@ const path = require('path');
 const helmet = require('helmet');
 const cors = require('cors');
 const pino = require('pino');
-const { generateSecureToken, timingSafeCompare } = require('./utils/security');
 const { normalizePhone } = require('./utils/phone');
 const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
 const port = process.env.PORT || 3000;
-const tokenFile = process.env.TOKEN_FILE || path.join(process.cwd(), 'auth', 'data', 'token.txt');
 
 const logger = pino({
   level: process.env.LOG_LEVEL || 'info',
@@ -22,29 +20,6 @@ const logger = pino({
     options: { colorize: true },
   },
 });
-
-let token;
-
-function getOrCreateToken() {
-  try {
-    if (fs.existsSync(tokenFile)) {
-      token = fs.readFileSync(tokenFile, 'utf8').trim();
-      logger.info('Loaded existing token from file');
-    } else {
-      token = generateSecureToken();
-      const dir = path.dirname(tokenFile);
-      if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-      fs.writeFileSync(tokenFile, token);
-      logger.info('Generated and saved new secure token');
-    }
-  } catch (error) {
-    logger.error({ msg: 'Error handling token', error: error.message });
-    token = generateSecureToken();
-  }
-  return token;
-}
-
-token = getOrCreateToken();
 
 // WhatsApp Client Setup
 const client = new Client({
@@ -130,12 +105,6 @@ app.use((req, res, next) => {
 
 // API Routes
 app.post('/api/send', async (req, res, next) => {
-  const authHeader = req.headers.authorization;
-
-  if (!timingSafeCompare(authHeader, token)) {
-    return res.status(401).json({ status: false, message: 'Error', meta: 'Not Authorized' });
-  }
-
   try {
     const { phone, message } = req.body;
     if (!phone || !message) {
@@ -163,7 +132,6 @@ app.get('/health', (req, res) => {
 app.get('/status', (req, res) => {
   res.status(200).json({
     status: 'online',
-    token_preview: token.substring(0, 8) + '...',
     whatsapp_ready: !!client.info,
   });
 });
@@ -175,7 +143,6 @@ module.exports = app;
 if (require.main === module) {
   const server = app.listen(port, () => {
     logger.info(`Server ready at http://localhost:${port}`);
-    logger.info(`Token for authorization: ${token}`);
   });
 
   // Initialize Client

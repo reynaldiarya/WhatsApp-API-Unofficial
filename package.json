@@ -9,7 +9,14 @@
     "test": "node tests/api.test.js",
     "format": "prettier . --write"
   },
-  "keywords": ["whatsapp", "api", "docker", "nodejs", "express", "whatsapp-web.js"],
+  "keywords": [
+    "whatsapp",
+    "api",
+    "docker",
+    "nodejs",
+    "express",
+    "whatsapp-web.js"
+  ],
   "author": "Reynaldi Arya",
   "license": "ISC",
   "dependencies": {
