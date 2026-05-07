@@ -3,10 +3,8 @@
 A high-performance authentication middleware designed to secure unofficial WhatsApp API gateways through centralized Nginx verification.
 
 <p align="center">
-  <img src="https://img.shields.io/npm/v/auth.svg?color=blue" />
-  <a href="https://www.npmjs.com/package/auth">
-    <img alt="downloads" src="https://img.shields.io/npm/dm/auth.svg?color=blue" target="_blank" />
-  </a>
+  <img src="https://img.shields.io/badge/version-1.0.1-blue.svg" />
+  <img src="https://img.shields.io/badge/Express.js-000000?logo=express&logoColor=white" />
   <a href="LICENSE">
     <img alt="License" src="https://img.shields.io/badge/license-MIT-yellow.svg" target="_blank" />
   </a>
@@ -73,7 +71,7 @@ npm start
 
 ```bash
 docker build -t whatsapp-api-auth .
-docker run -d -p 5000:5000 -v $(pwd)/auth/data:/auth/data whatsapp-api-auth
+docker run -d -p 5000:5000 --env-file .env --restart unless-stopped whatsapp-api-auth
 ```
 
 ## Configuration
