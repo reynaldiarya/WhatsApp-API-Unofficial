@@ -1,69 +1,166 @@
 # WhatsApp API Unofficial
 
-This project provides a simple WhatsApp API using whatsapp-web.js. The service is containerized using Docker for easy deployment and scalability.
+A high-performance, secure, and containerized WhatsApp API gateway built with Node.js and whatsapp-web.js.
 
-## Requirements
+<p align="center">
+  <img src="https://img.shields.io/badge/version-1.0.1-blue.svg" />
+  <img src="https://img.shields.io/badge/Node.js-20.x-339933.svg" />
+  <img src="https://img.shields.io/badge/Express-5.x-000000.svg" />
+  <a href="LICENSE">
+    <img alt="License" src="https://img.shields.io/badge/license-MIT-yellow.svg" target="_blank" />
+  </a>
+  <a href="https://codecov.io/gh/reynaldiarya/WhatsApp-API-Unofficial">
+    <img src="https://codecov.io/gh/reynaldiarya/WhatsApp-API-Unofficial/branch/main/graph/badge.svg" />
+  </a>
+</p>
 
-- Docker installed on your system
-- Access to the terminal/command prompt
+## Description
 
-## Getting Started
+WhatsApp API Unofficial provides a robust RESTful interface for interacting with WhatsApp through an automated browser session. It eliminates the complexity of managing headless browsers and session persistence, offering a streamlined developer experience for sending messages and automating notifications. The service includes a built-in security layer and is fully containerized, making it ideal for microservices architectures and automated deployment pipelines.
 
-### Step 1: Build the Docker Image for Load Balancing
+## Features
 
-Use the following command to build the Docker image:
+- **Automated Authentication** - Integrated QR code terminal generation for seamless account linking and session management
+- **RESTful Messaging** - Simple HTTP POST endpoint for sending text messages to any valid WhatsApp number
+- **System Monitoring** - Dedicated health check and status endpoints to monitor API availability and WhatsApp client readiness
+- **Container Ready** - Optimized Docker configuration for rapid deployment and consistent environments
+- **Smart Auto-Responder** - Optional automated reply system for directing users to primary contact numbers
+- **Advanced Logging** - High-performance structured logging using Pino with support for multiple log levels
 
-```bash
-docker build -t whatsapp-api:v1 .
-```
+## Tech Stack
 
-### Step 2: Run the Container
+- **Runtime Environment**: Node.js 20+
+- **Web Framework**: Express 5.2
+- **WhatsApp Integration**: whatsapp-web.js (Puppeteer)
+- **Security**: Helmet, CORS
+- **Process Management**: PM2
+- **Logging**: Pino & Pino-pretty
+- **Containerization**: Docker
 
-Run the Docker container and expose the service on port 5000:
+## Installation Guide
 
-```bash
-docker run -p 3001:3001 --name whatsapp-api --env-file .env --restart unless-stopped whatsapp-api:v1
-```
+### Prerequisites
 
-### Step 3: Access the Service
+- Node.js 20 or higher
+- Docker and Docker Compose (optional, for containerized deployment)
+- A WhatsApp account for linking
 
-The service will be accessible at:
+### Local Installation
 
-```
-http://localhost:3001/api/send
-```
-
-## Example Requests
-
-### Send Message Request
-
-Make a POST request to the `/api/send` endpoint:
-
-```bash
-curl -X POST http://localhost:3001/api/send \
-     -H "Content-Type: application/json" \
-     -d '{
-           "phone": "+6201111111111",
-           "message": "Alo"
-         }'
-```
-
-## Stopping and Removing the Container
-
-To stop the running container:
+1. Clone the repository and navigate to the project directory
+2. Install the required dependencies
 
 ```bash
-docker stop whatsapp-api
+npm install
 ```
 
-To remove the container:
+3. Configure the environment variables
 
 ```bash
-docker rm whatsapp-api
+cp .env.example .env
 ```
 
-## Notes
+4. Start the development server
 
-- Ensure that port `3001` is not being used by other services.
-- Use `--restart unless-stopped` to automatically restart the container if it stops unexpectedly.
-- It doesn't use auth tokens, so anyone can send it. If you want to add auth, read the readme on the auth branch
+```bash
+npm run dev
+```
+
+5. Scan the QR code displayed in your terminal using your WhatsApp mobile application (Linked Devices > Link a Device)
+
+### Docker Deployment
+
+To run the application using Docker, use the provided Dockerfile:
+
+```bash
+docker build -t wa-api-unofficial .
+docker run -p 3000:3000 --env-file .env wa-api-unofficial
+```
+
+## Configuration
+
+The application is configured via environment variables. Ensure your `.env` file is properly set up.
+
+### Environment Variables
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `PORT` | The port on which the Express server listens | `3000` |
+| `LOG_LEVEL` | Logging verbosity (debug, info, warn, error) | `info` |
+| `AUTOREPLY` | Enable or disable the automatic response system | `true` |
+| `MAIN_NUMBER` | The primary contact number for the auto-responder | `+6281234567890` |
+| `NODE_ENV` | Current execution environment | `development` |
+
+## Usage
+
+### API Endpoints
+
+#### 1. Send Message
+Sends a text message to a specified phone number.
+
+- **Endpoint**: `POST /api/send`
+- **Body**:
+```json
+{
+  "phone": "628123456789",
+  "message": "Hello from the WhatsApp API!"
+}
+```
+
+#### 2. System Status
+Check the current state of the API and WhatsApp connection.
+
+- **Endpoint**: `GET /status`
+- **Response**:
+```json
+{
+  "status": "online",
+  "whatsapp_ready": true
+}
+```
+
+#### 3. Health Check
+Simple endpoint for load balancer health checks.
+
+- **Endpoint**: `GET /health`
+
+## Project Structure
+
+```text
+/
+├── src/
+│   ├── index.js          # Server entry point and WhatsApp client logic
+│   ├── middleware/       # Express middleware (error handling, auth)
+│   └── utils/            # Security and phone normalization utilities
+├── tests/                # API and integration tests
+├── Dockerfile            # Container configuration
+├── ecosystem.config.js   # PM2 process management configuration
+└── package.json          # Project dependencies and scripts
+```
+
+## Scripts / Commands
+
+| Command | Description |
+|---------|-------------|
+| `npm start` | Start the application in production mode using PM2 |
+| `npm run dev` | Start the application in development mode with Nodemon |
+| `npm test` | Execute the test suite |
+| `npm run format` | Format the codebase using Prettier |
+
+## Contributing
+
+Contributions are welcome to enhance the functionality and security of this project.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for the full license text.
+
+## Author
+
+Reynaldi Arya
