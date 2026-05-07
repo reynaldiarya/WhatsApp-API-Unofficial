@@ -1,127 +1,169 @@
-# WhatsApp API Unofficial
+# WhatsApp API Secure Gateway
 
-This project provides a simple WhatsApp API using whatsapp-web.js. The service is containerized using Docker for easy deployment and scalability.
+A high-performance authentication middleware designed to secure unofficial WhatsApp API gateways through centralized Nginx verification.
 
-## Requirements
+<p align="center">
+  <img src="https://img.shields.io/npm/v/auth.svg?color=blue" />
+  <a href="https://www.npmjs.com/package/auth">
+    <img alt="downloads" src="https://img.shields.io/npm/dm/auth.svg?color=blue" target="_blank" />
+  </a>
+  <a href="LICENSE">
+    <img alt="License" src="https://img.shields.io/badge/license-MIT-yellow.svg" target="_blank" />
+  </a>
+  <a href="https://codecov.io/gh/reynaldiarya/WhatsApp-API-Unofficial">
+    <img src="https://codecov.io/gh/reynaldiarya/WhatsApp-API-Unofficial/branch/main/graph/badge.svg" />
+  </a>
+</p>
 
-- Docker installed on your system
-- Access to the terminal/command prompt
+## Description
 
-## Getting Started
+WhatsApp API Secure Gateway provides a robust authentication layer for securing private or unofficial WhatsApp API instances. It is specifically engineered to integrate with the Nginx `auth_request` module, allowing developers to centralize security logic and protect multiple backend services with a single, cryptographically secure token system. By offloading authentication to this specialized service, you ensure that only authorized requests reach your WhatsApp automation logic, preventing unauthorized access and potential rate-limiting issues on the messaging platform.
 
-### Step 1: Build the Docker Image for Load Balancing using single auth
+## Features
 
-Use the following command to build the Docker image:
+- **Nginx Integration** - Native support for the `auth_request` module, enabling subrequest-based authentication for backend services
+- **Automated Token Management** - Automatically generates, rotates, and persists secure cryptographically strong tokens in a flat-file database
+- **Timing-Safe Verification** - Implements timing-safe string comparisons to protect against side-channel attacks during authentication
+- **High-Performance Logging** - Structured, production-ready logging powered by Pino for real-time observability and monitoring
+- **Security-First Headers** - Pre-configured with Helmet.js to enforce secure HTTP headers and protect against common web vulnerabilities
+- **Containerized Architecture** - Fully dockerized with an optimized Alpine Linux footprint for seamless deployment in modern CI/CD pipelines
+- **Graceful Lifecycle Management** - Built-in handlers for clean shutdowns, ensuring no data loss or hung processes during service restarts
+
+## Tech Stack
+
+- **Runtime**: Node.js 22 (LTS)
+- **Framework**: Express.js 5.x
+- **Security**: Helmet, Timing-Safe Comparisons
+- **Logging**: Pino, Pino-Pretty
+- **Reverse Proxy Support**: Nginx (auth_request)
+- **Deployment**: Docker, Alpine Linux
+
+## Installation Guide
+
+### Prerequisites
+
+- Node.js 20.x or higher
+- Docker (optional, for containerized deployment)
+- Nginx with `ngx_http_auth_request_module` enabled
+
+### Manual Setup
+
+1. Clone the repository
+```bash
+git clone -b auth https://github.com/reynaldiarya/WhatsApp-API-Unofficial.git
+cd WhatsApp-API-Unofficial
+```
+
+2. Install dependencies
+```bash
+npm install
+```
+
+3. Configure environment variables
+```bash
+cp .env.example .env
+```
+
+4. Start the service
+```bash
+npm start
+```
+
+### Docker Deployment
 
 ```bash
-docker build -t whatsapp-api:auth .
+docker build -t whatsapp-api-auth .
+docker run -d -p 5000:5000 -v $(pwd)/auth/data:/auth/data whatsapp-api-auth
 ```
 
-### Step 2: Run the Container
+## Configuration
 
-Run the Docker container and expose the service on port 5000:
+The application is configured using environment variables. Ensure these are set in your `.env` file or container environment.
 
-```bash
-docker run -p 5000:5000 --name whatsapp-api-auth --env-file .env --restart unless-stopped whatsapp-api:auth
-```
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `PORT` | The port the authentication service listens on | `5000` |
+| `TOKEN_FILE` | Path to the file where the secure token is stored | `./auth/data/token.txt` |
+| `NODE_ENV` | Environment mode (development/production) | `development` |
+| `LOG_LEVEL` | Minimum log level (info, debug, error) | `info` |
 
-### Step 3: Access the Service
+## Usage
 
-The service will be accessible at:
+### Nginx Configuration
 
-```
-http://localhost:5000/auth
-```
+To secure your WhatsApp API with this service, add the following to your Nginx server block:
 
-### Step 4: Install and Configure Nginx with a Custom Domain
+```nginx
+server {
+    listen 80;
+    server_name wa.yourdomain.com;
 
-#### Install Nginx
+    location / {
+        auth_request /auth;
+        proxy_pass http://your_whatsapp_api_backend;
+        proxy_set_header Authorization $http_authorization;
+    }
 
-Install Nginx on your server using the following command:
-
-```bash
-sudo apt update
-sudo apt install nginx
-```
-
-#### Set Up a Domain Name
-
-1. If you have a domain (e.g., `wa.example.com`), point it to your server's IP address using your domain registrar's DNS settings.
-2. Verify that the domain points to your server:
-   ```bash
-   ping wa.example.com
-   ```
-
-#### Configure Nginx
-
-1. Create a new Nginx configuration file:
-   ```bash
-   sudo nano /etc/nginx/sites-available/wa.example.com.conf
-   ```
-2. Add the following configuration to the file. You can use the provided nginx.conf.example as a template to set up the API with Nginx.
-3. Enable the configuration by creating a symbolic link:
-   ```bash
-   sudo ln -s /etc/nginx/sites-available/wa.example.com.conf /etc/nginx/sites-enabled/
-   ```
-
-#### Test and Reload Nginx
-
-1. Test the Nginx configuration for syntax errors:
-   ```bash
-   sudo nginx -t
-   ```
-2. Reload Nginx to apply the changes:
-   ```bash
-   sudo systemctl reload nginx
-   ```
-
-#### Access the Service via Domain
-
-Now, your service is accessible via the custom domain:
-
-```
-http://wa.example.com/auth
-```
-
-## Example Requests
-
-### Authentication Request
-
-Make a POST request to the `/auth` endpoint with user credentials:
-
-```bash
-curl -X POST http://localhost:5000/auth \
-     -H "Content-Type: application/json" \
-     -H "Authorization: <your-token>"
-```
-
-### Error Response
-
-If authentication fails, you will receive an error message:
-
-```json
-{
-  "status": "false",
-  "message": "Error",
-  "meta": "Not Authorized"
+    location = /auth {
+        internal;
+        proxy_pass http://localhost:5000/auth;
+        proxy_pass_request_body off;
+        proxy_set_header Content-Length "";
+        proxy_set_header X-Original-URI $request_uri;
+        proxy_set_header Authorization $http_authorization;
+    }
 }
 ```
 
-## Stopping and Removing the Container
+### API Endpoints
 
-To stop the running container:
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/auth` | Validates the `Authorization` header against the stored token. |
+| `GET` | `/health` | Returns the service status and current server timestamp. |
 
+**Sample Authentication Request:**
 ```bash
-docker stop whatsapp-api-auth
+curl -X GET http://localhost:5000/auth \
+  -H "Authorization: YOUR_GENERATED_TOKEN"
 ```
 
-To remove the container:
+## Project Structure
 
-```bash
-docker rm whatsapp-api-auth
+```text
+/
+├── auth/data/            # Persistent storage for the authentication token
+├── src/
+│   ├── middleware/       # Express middleware (Error handling, etc.)
+│   ├── utils/            # Security utilities and token generation logic
+│   └── index.js          # Main entry point and API route definitions
+├── tests/                # Automated testing suite
+├── Dockerfile            # Container definition
+└── nginx.conf.example    # Reference configuration for reverse proxy integration
 ```
 
-## Notes
+## Scripts / Commands
 
-- Ensure that port `5000` is not being used by other services.
-- Use `--restart unless-stopped` to automatically restart the container if it stops unexpectedly.
+| Command | Description |
+|---------|-------------|
+| `npm start` | Start the production server |
+| `npm run dev` | Start the server with Nodemon for development |
+| `npm test` | Execute the authentication logic tests |
+| `npm run format` | Format the source code using Prettier |
+
+## Contributing
+
+Contributions are essential for maintaining a secure and reliable gateway. To contribute:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/improvement`)
+3. Commit your changes following professional standards
+4. Push to the branch and open a Pull Request
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for the full text.
+
+## Author
+
+Reynaldi Arya
