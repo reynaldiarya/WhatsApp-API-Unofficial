@@ -75,7 +75,7 @@ To run the application using Docker, use the provided Dockerfile:
 
 ```bash
 docker build -t wa-api-unofficial .
-docker run -p 3000:3000 --env-file .env wa-api-unofficial
+docker run -p 3000:3000 --env-file .env --restart unless-stopped wa-api-unofficial
 ```
 
 ## Configuration
