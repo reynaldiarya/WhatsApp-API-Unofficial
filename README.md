@@ -9,9 +9,6 @@ A high-performance, secure, and containerized WhatsApp API gateway built with No
   <a href="LICENSE">
     <img alt="License" src="https://img.shields.io/badge/license-MIT-yellow.svg" target="_blank" />
   </a>
-  <a href="https://codecov.io/gh/reynaldiarya/WhatsApp-API-Unofficial">
-    <img src="https://codecov.io/gh/reynaldiarya/WhatsApp-API-Unofficial/branch/main/graph/badge.svg" />
-  </a>
 </p>
 
 ## Description
