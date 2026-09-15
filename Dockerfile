@@ -1,5 +1,5 @@
 # Base image Node.js versi terbaru
-FROM node:22-alpine
+FROM node:24-alpine
 
 # Membuat direktori kerja di dalam container
 WORKDIR /app

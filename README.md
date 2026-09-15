@@ -4,7 +4,7 @@ A high-performance, secure, and containerized WhatsApp API gateway built with No
 
 <p align="center">
   <img src="https://img.shields.io/badge/version-1.0.1-blue.svg" />
-  <img src="https://img.shields.io/badge/Node.js-20.x-339933.svg" />
+  <img src="https://img.shields.io/badge/Node.js-24.x-339933.svg" />
   <img src="https://img.shields.io/badge/Express-5.x-000000.svg" />
   <a href="LICENSE">
     <img alt="License" src="https://img.shields.io/badge/license-MIT-yellow.svg" target="_blank" />
@@ -26,7 +26,7 @@ WhatsApp API Unofficial provides a robust RESTful interface for interacting with
 
 ## Tech Stack
 
-- **Runtime Environment**: Node.js 20+
+- **Runtime Environment**: Node.js 24+
 - **Web Framework**: Express 5.2
 - **WhatsApp Integration**: whatsapp-web.js (Puppeteer)
 - **Security**: Helmet, CORS
@@ -38,7 +38,7 @@ WhatsApp API Unofficial provides a robust RESTful interface for interacting with
 
 ### Prerequisites
 
-- Node.js 20 or higher
+- Node.js 24 or higher
 - Docker and Docker Compose (optional, for containerized deployment)
 - A WhatsApp account for linking
 
