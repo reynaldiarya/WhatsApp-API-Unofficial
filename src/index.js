@@ -24,11 +24,6 @@ const logger = pino({
 // WhatsApp Client Setup
 const client = new Client({
   authStrategy: new LocalAuth(),
-  webVersionCache: {
-    type: 'remote',
-    remotePath:
-      'https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.3000.1054721061-alpha.html',
-  },
   puppeteer: {
     headless: true,
     args: [
@@ -66,12 +61,16 @@ client.on('ready', () => {
 client.on('message', async (message) => {
   if (process.env.AUTOREPLY !== 'true') return;
   const mainNumber = process.env.MAIN_NUMBER || '+6281234567890';
-  message.reply(
-    `Terima kasih sudah menghubungi kami.\n` +
-      `Untuk layanan lebih lanjut, silakan WhatsApp ke nomor utama kami di:\n` +
-      `https://wa.me/${normalizePhone(mainNumber)}\n` +
-      `Kami siap membantu Anda!`
-  );
+  try {
+    await message.reply(
+      `Terima kasih sudah menghubungi kami.\n` +
+        `Untuk layanan lebih lanjut, silakan WhatsApp ke nomor utama kami di:\n` +
+        `https://wa.me/${normalizePhone(mainNumber)}\n` +
+        `Kami siap membantu Anda!`
+    );
+  } catch (err) {
+    logger.error({ err }, 'WhatsApp auto-reply failed');
+  }
 });
 
 client.on('disconnected', (reason) => {
@@ -146,7 +145,19 @@ if (require.main === module) {
   });
 
   // Initialize Client
-  client.initialize();
+  client.initialize().catch(async (err) => {
+    logger.error({ err }, 'WhatsApp client initialization failed');
+    process.exitCode = 1;
+    server.close();
+    try {
+      await client.destroy();
+    } catch (cleanupError) {
+      logger.error(
+        { err: cleanupError },
+        'Error cleaning up WhatsApp client after initialization failure'
+      );
+    }
+  });
 
   // Graceful Shutdown
   const shutdown = async () => {

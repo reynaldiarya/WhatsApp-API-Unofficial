@@ -80,23 +80,25 @@ The application is configured via environment variables. Ensure your `.env` file
 
 ### Environment Variables
 
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `PORT` | The port on which the Express server listens | `3000` |
-| `LOG_LEVEL` | Logging verbosity (debug, info, warn, error) | `info` |
-| `AUTOREPLY` | Enable or disable the automatic response system | `true` |
+| Variable      | Description                                       | Default          |
+| ------------- | ------------------------------------------------- | ---------------- |
+| `PORT`        | The port on which the Express server listens      | `3000`           |
+| `LOG_LEVEL`   | Logging verbosity (debug, info, warn, error)      | `info`           |
+| `AUTOREPLY`   | Enable or disable the automatic response system   | `true`           |
 | `MAIN_NUMBER` | The primary contact number for the auto-responder | `+6281234567890` |
-| `NODE_ENV` | Current execution environment | `development` |
+| `NODE_ENV`    | Current execution environment                     | `development`    |
 
 ## Usage
 
 ### API Endpoints
 
 #### 1. Send Message
+
 Sends a text message to a specified phone number.
 
 - **Endpoint**: `POST /api/send`
 - **Body**:
+
 ```json
 {
   "phone": "628123456789",
@@ -105,10 +107,12 @@ Sends a text message to a specified phone number.
 ```
 
 #### 2. System Status
+
 Check the current state of the API and WhatsApp connection.
 
 - **Endpoint**: `GET /status`
 - **Response**:
+
 ```json
 {
   "status": "online",
@@ -117,6 +121,7 @@ Check the current state of the API and WhatsApp connection.
 ```
 
 #### 3. Health Check
+
 Simple endpoint for load balancer health checks.
 
 - **Endpoint**: `GET /health`
@@ -137,12 +142,12 @@ Simple endpoint for load balancer health checks.
 
 ## Scripts / Commands
 
-| Command | Description |
-|---------|-------------|
-| `npm start` | Start the application in production mode using PM2 |
-| `npm run dev` | Start the application in development mode with Nodemon |
-| `npm test` | Execute the test suite |
-| `npm run format` | Format the codebase using Prettier |
+| Command          | Description                                            |
+| ---------------- | ------------------------------------------------------ |
+| `npm start`      | Start the application in production mode using PM2     |
+| `npm run dev`    | Start the application in development mode with Nodemon |
+| `npm test`       | Execute the test suite                                 |
+| `npm run format` | Format the codebase using Prettier                     |
 
 ## Contributing
 
